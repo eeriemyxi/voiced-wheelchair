@@ -35,11 +35,18 @@ function App() {
       <div className="flex flex-col justify-center items-center gap-5">
         <button
           className="bg-accent p-5 rounded-full text-text-inverse cursor-pointer hover:bg-accent/80 drop-shadow-lg"
-          onClick={() => {
+          onClick={async () => {
             if (!listening) {
-              SpeechRecognition.startListening({continuous: true, language: "en-US"});
+              resetTranscript();
+              SpeechRecognition.startListening({
+                continuous: true,
+                language: "en-US",
+              });
             } else {
               SpeechRecognition.stopListening();
+              const url = new URL("../api/control", window.location.href);
+              url.searchParams.set("prompt", transcript);
+              alert(await (await fetch(url)).text()); // TODO: finish it
             }
           }}
         >

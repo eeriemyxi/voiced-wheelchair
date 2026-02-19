@@ -17,11 +17,23 @@ services:
         - backend
         - frontend
   backend:
-    image: docker.io/library/python:3.11-slim
-    working_dir: /app
-    volumes:
-      - ./backend:/app:Z
-    command: sh -c "pip install uv && uv sync && uv run fastapi run main.py"
+    build:
+      context: ./backend/
+      target: development
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    develop:
+      watch:
+        - action: restart
+          path: ./config.toml
+        - action: rebuild
+          path: ./backend/Dockerfile
+        - action: rebuild
+          path: ./backend/pyproject.toml
+          target: /backend/pyproject.toml
+        - action: sync
+          path: ./backend
+          target: /backend
   frontend:
     image: docker.io/oven/bun:slim
     working_dir: /app

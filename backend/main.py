@@ -1,5 +1,6 @@
 import asyncio
 import os
+import json
 from google import genai
 from google.genai import types
 
@@ -40,26 +41,20 @@ movement_reverse = {
     },
 }
 
+SYSTEM_PROMPT = """You are a wheelchair driver converting natural speech to precise instructions. 
+You must output ONLY a JSON list of objects representing the sequence of movements.
+Valid commands are: "movement_left", "movement_right", "movement_accelerate" (requires "duration" in seconds), "movement_reverse" (requires "duration" in seconds).
+Assume 1 second durations when vague.
+
+Example Output:
+[
+  {"name": "movement_accelerate", "args": {"duration": 2}},
+  {"name": "movement_left", "args": {}}
+]"""
+
 genai_client = genai.Client()
 chat = genai_client.chats.create(
-    model="gemini-2.5-flash-lite",
-    config=types.GenerateContentConfig(
-        tools=[
-            types.Tool(
-                function_declarations=[
-                    movement_left,
-                    movement_right,
-                    movement_accelerate,
-                    movement_reverse,
-                ]
-            )
-        ],
-        system_instruction="You are a wheelchair driver. Use the movement tools to navigate the course. Assume reasonably short timeouts like 1 second when it is vague. I am using you to convert natural speech to precise instructions for my wheelchair project, adjust accordingly.",
-        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
-        tool_config=types.ToolConfig(
-            function_calling_config=types.FunctionCallingConfig(mode="ANY")
-        ),
-    ),
+    model="gemma-3-27b-it",
 )
 
 
@@ -69,10 +64,18 @@ async def _(prompt: str):
         return {"error": "control already running"}
 
     async with control_lock:
-        response = chat.send_message(prompt)
+        response = chat.send_message(SYSTEM_PROMPT + f"---\nINPUT: " + prompt)
+        clean_text = response.text.strip()
+        if clean_text.startswith("```json"):
+            clean_text = clean_text[7:]
+        if clean_text.startswith("```"):
+            clean_text = clean_text[3:]
+        if clean_text.endswith("```"):
+            clean_text = clean_text[:-3]
+        clean_text = clean_text.strip()
+        commands = json.loads(clean_text)
         final = []
-        for fn in response.function_calls:
-            args = ", ".join(f"{key}={val}" for key, val in fn.args.items())
-            final.append(f"{fn.name}({args})")
-
+        for cmd in commands:
+            args = ", ".join(f"{key}={val}" for key, val in cmd.get("args", {}).items())
+            final.append(f"{cmd['name']}({args})")
         return dict(prompt=prompt, instructions=final)

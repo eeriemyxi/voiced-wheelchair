@@ -1,0 +1,34 @@
+# dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# build output (rebuild inside container)
+build
+dist
+
+# environment & secrets
+.env
+.env.*
+!.env.example
+
+# VCS
+.git
+.gitignore
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+
+# tests & coverage
+coverage
+__tests__
+*.test.*
+*.spec.*
+
+# misc
+*.md

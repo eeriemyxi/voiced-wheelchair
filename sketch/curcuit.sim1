@@ -1,0 +1,71 @@
+<circuit version="1.1.0-SR1" rev="2005" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
+
+<item itemtype="Subcircuit" CircId="Uno-1" mainComp="false" Show_id="true" Show_Val="false" Pos="-676,-220" rotation="0" hflip="1" vflip="1" label="Uno-1" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Logic_Symbol="false">
+<mainCompProps MainCompId="mega328-109" Frequency="16 MHz" Program="firmware/build/firmware.ino.hex" Auto_Load="false" saveEepr="true" MainMcu="true" SerialMon="-1" />
+</item>
+
+<item itemtype="SerialTerm" CircId="SerialTerm-2" mainComp="false" Show_id="false" Show_Val="false" Pos="-668,-284" rotation="0" hflip="1" vflip="1" label="SerialTerm-2" idLabPos="-20,-32" labelrot="0" valLabPos="-16,20" valLabRot="0" Baudrate="9600 _Bd" DataBits="8 _bits" StopBits="1 _bits" SerialMon="false" />
+
+<item itemtype="DcMotor" CircId="DcMotor-3" mainComp="false" Show_id="true" Show_Val="false" Pos="-372,-124" rotation="0" hflip="1" vflip="1" label="DcMotor-3" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="60 _RPM" Volt_Nominal="5 V" Resistance="100 Ω" />
+
+<item itemtype="DcMotor" CircId="DcMotor-4" mainComp="false" Show_id="true" Show_Val="false" Pos="-284,-124" rotation="0" hflip="1" vflip="1" label="DcMotor-4" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="60 _RPM" Volt_Nominal="5 V" Resistance="100 Ω" />
+
+<item itemtype="Subcircuit" CircId="L298P-5" mainComp="false" Show_id="true" Show_Val="false" Pos="-468,4" rotation="0" hflip="1" vflip="1" label="L298P-5" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Input_High_V="2.5 V" Input_Low_V="2.5 V" Input_Imped="1e+09 Ω" Out_High_V="5 V" Out_Low_V="0 V" Out_Imped="40 Ω" Tpd_ps="10 ns" Tr_ps="3 ns" Tf_ps="4 ns" Logic_Symbol="true" />
+
+<item itemtype="Battery" CircId="Battery-6" mainComp="false" Show_id="false" Show_Val="false" Pos="-380,52" rotation="0" hflip="1" vflip="1" label="Battery-6" idLabPos="-18,-22" labelrot="0" valLabPos="-10,10" valLabRot="0" Voltage="12 V" Resistance="1 mΩ" />
+
+<item itemtype="SerialPort" CircId="SerialPort-10" mainComp="false" Show_id="false" Show_Val="false" Pos="-540,-252" rotation="0" hflip="1" vflip="1" label="SerialPort-10" idLabPos="-20,-32" labelrot="0" valLabPos="-16,20" valLabRot="0" Auto="false" Port="/dev/pts/3" Baudrate="9600 _Bd" DataBits="8 _bits" StopBits="1 _bits" SerialMon="true" />
+
+<item itemtype="Node" CircId="Node-7" mainComp="false" Pos="-404,68" />
+
+<item itemtype="Node" CircId="Node-8" mainComp="false" Pos="-404,68" />
+
+<item itemtype="Node" CircId="Node-11" mainComp="false" Pos="-708,-260" />
+
+<item itemtype="Node" CircId="Node-13" mainComp="false" Pos="-692,-244" />
+
+<item itemtype="Connector" uid="Connector-3" startpinid="DcMotor-3-lPin" endpinid="L298P-5-OUT1" pointList="-412,-124,-420,-124,-420,12,-428,12" />
+
+<item itemtype="Connector" uid="Connector-4" startpinid="DcMotor-3-rPin" endpinid="L298P-5-OUT2" pointList="-332,-124,-332,20,-428,20" />
+
+<item itemtype="Connector" uid="Connector-5" startpinid="DcMotor-4-lPin" endpinid="L298P-5-OUT3" pointList="-324,-124,-324,28,-428,28" />
+
+<item itemtype="Connector" uid="Connector-6" startpinid="DcMotor-4-rPin" endpinid="L298P-5-OUT4" pointList="-244,-124,-244,36,-428,36" />
+
+<item itemtype="Connector" uid="Connector-9" startpinid="L298P-5-EnB" endpinid="Uno-1-5" pointList="-476,60,-740,60,-740,-164,-668,-164" />
+
+<item itemtype="Connector" uid="Connector-10" startpinid="L298P-5-IN3" endpinid="Uno-1-7" pointList="-476,28,-724,28,-724,-148,-668,-148" />
+
+<item itemtype="Connector" uid="Connector-11" startpinid="L298P-5-IN4" endpinid="Uno-1-6" pointList="-476,36,-732,36,-732,-156,-668,-156" />
+
+<item itemtype="Connector" uid="Connector-13" startpinid="Node-7-2" endpinid="L298P-5-SenB" pointList="-404,68,-428,68" />
+
+<item itemtype="Connector" uid="Connector-14" startpinid="Battery-6-rPin" endpinid="Node-8-1" pointList="-364,52,-364,68,-404,68" />
+
+<item itemtype="Connector" uid="Connector-15" startpinid="Uno-1-GND1" endpinid="Node-8-0" pointList="-524,-132,-508,-132,-508,76,-404,76,-404,68" />
+
+<item itemtype="Connector" uid="Connector-16" startpinid="Node-8-2" endpinid="Node-7-0" pointList="-404,68,-404,68" />
+
+<item itemtype="Connector" uid="Connector-21" startpinid="Battery-6-lPin" endpinid="L298P-5-Vs" pointList="-396,52,-428,52" />
+
+<item itemtype="Connector" uid="Connector-23" startpinid="SerialTerm-2-pin0" endpinid="Node-11-0" pointList="-692,-292,-708,-292,-708,-260" />
+
+<item itemtype="Connector" uid="Connector-24" startpinid="Node-11-2" endpinid="Uno-1-0" pointList="-708,-260,-708,-204,-668,-204" />
+
+<item itemtype="Connector" uid="Connector-22" startpinid="SerialPort-10-pin0" endpinid="Node-11-1" pointList="-580,-260,-708,-260" />
+
+<item itemtype="Connector" uid="Connector-29" startpinid="SerialPort-10-pin1" endpinid="Node-13-1" pointList="-580,-244,-692,-244" />
+
+<item itemtype="Connector" uid="Connector-30" startpinid="SerialTerm-2-pin1" endpinid="Node-13-0" pointList="-692,-276,-692,-244" />
+
+<item itemtype="Connector" uid="Connector-7" startpinid="L298P-5-IN1" endpinid="Uno-1-9" pointList="-476,12,-708,12,-708,-124,-668,-124" />
+
+<item itemtype="Connector" uid="Connector-8" startpinid="L298P-5-IN2" endpinid="Uno-1-8" pointList="-476,20,-716,20,-716,-132,-668,-132" />
+
+<item itemtype="Connector" uid="Connector-20" startpinid="L298P-5-EnA" endpinid="Uno-1-10" pointList="-476,52,-700,52,-700,-116,-668,-116" />
+
+<item itemtype="Connector" uid="Connector-31" startpinid="Node-13-2" endpinid="Uno-1-1" pointList="-692,-244,-692,-196,-668,-196" />
+
+<item itemtype="Connector" uid="Connector-12" startpinid="L298P-5-SenA" endpinid="Node-7-1" pointList="-428,60,-404,60,-404,68" />
+
+</circuit>

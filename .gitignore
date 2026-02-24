@@ -67,3 +67,4 @@ Thumbs.db
 
 # Config files with credentials
 config.toml
+sketch/firmware/build

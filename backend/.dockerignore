@@ -1,0 +1,15 @@
+# Python
+.venv
+__pycache__
+*.pyc
+
+# Node / Bun
+node_modules
+bun.lockb
+
+# OS / misc
+.DS_Store
+
+# Git
+.git
+.gitignore

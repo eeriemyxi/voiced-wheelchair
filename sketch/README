@@ -1,0 +1,6 @@
+How to compile:
+
+arduino-cli compile \
+        --fqbn arduino:avr:uno \
+        --build-path firmware/build \
+        firmware

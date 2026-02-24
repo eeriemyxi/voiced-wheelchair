@@ -77,13 +77,6 @@ void moveRight() {
   digitalWrite(in3, LOW);
   digitalWrite(in4, LOW);
   analogWrite(enB, 0);
-
-  delay(2000);
-
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
-  analogWrite(enA, 0);
-
 }
 
 void moveLeft() {
@@ -96,12 +89,6 @@ void moveLeft() {
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
   analogWrite(enA, 0);
-
-  delay(2000);
-
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, LOW);
-  analogWrite(enB, 0);
 }
 
 void moveBackward() {

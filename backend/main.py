@@ -1,5 +1,6 @@
 import asyncio
 import os
+import socket
 import json
 from google import genai
 from google.genai import types
@@ -8,38 +9,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 control_lock = asyncio.Lock()
-
-movement_left = {"name": "movement_left", "description": "Turn left by 90 degrees."}
-
-movement_right = {"name": "movement_right", "description": "Turn right by 90 degrees."}
-
-movement_accelerate = {
-    "name": "movement_accelerate",
-    "description": "Accelerate the wheelchair for N seconds.",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "duration": {
-                "type": "integer",
-                "description": "The number of seconds to accelerate for.",
-            }
-        },
-    },
-}
-
-movement_reverse = {
-    "name": "movement_reverse",
-    "description": "Move the wheelchair backwards for N seconds.",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "duration": {
-                "type": "integer",
-                "description": "The number of seconds to reverse for.",
-            }
-        },
-    },
-}
 
 SYSTEM_PROMPT = """You are a wheelchair driver converting natural speech to precise instructions. 
 You must output ONLY a JSON list of objects representing the sequence of movements.
@@ -57,6 +26,25 @@ chat = genai_client.chats.create(
     model="gemma-3-27b-it",
 )
 
+def send_to_bluetooth(message: str):
+    host = 'host.docker.internal'
+    port = int(os.environ["BRIDGE_PORT"])
+    
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(5)
+            s.connect((host, port))
+            
+            print(f"Sending: {message}")
+            s.sendall(message.encode('utf-8'))
+            
+            data = s.recv(1024)
+            print(f"Received from Bluetooth: {data.decode('utf-8')}")
+            
+    except ConnectionRefusedError:
+        print("Error: Could not connect to the Windows Bridge. Is it running?")
+    except socket.timeout:
+        print("Error: Connection timed out.")
 
 @app.get("/control")
 async def _(prompt: str):
@@ -78,4 +66,21 @@ async def _(prompt: str):
         for cmd in commands:
             args = ", ".join(f"{key}={val}" for key, val in cmd.get("args", {}).items())
             final.append(f"{cmd['name']}({args})")
+        for cmd in commands:
+            if cmd["name"] == "movement_accelerate":
+                send_to_bluetooth("W")
+                await asyncio.sleep(int(cmd["args"]["duration"]))
+                send_to_bluetooth("S")
+            elif cmd["name"] == "movement_reverse":
+                send_to_bluetooth("X")
+                await asyncio.sleep(int(cmd["args"]["duration"]))
+                send_to_bluetooth("S")
+            elif cmd["name"] == "movement_left":
+                send_to_bluetooth("L")
+                await asyncio.sleep(2)
+                send_to_bluetooth("S")
+            elif cmd["name"] == "movement_right":
+                send_to_bluetooth("R")
+                await asyncio.sleep(2)
+                send_to_bluetooth("S")
         return dict(prompt=prompt, instructions=final)

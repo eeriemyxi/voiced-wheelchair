@@ -40,7 +40,7 @@ function App() {
               resetTranscript();
               SpeechRecognition.startListening({
                 continuous: true,
-                language: "en-US",
+                language: "en-IN",
               });
             } else {
               SpeechRecognition.stopListening();

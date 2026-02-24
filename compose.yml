@@ -22,6 +22,7 @@ services:
       target: development
     environment:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      BRIDGE_PORT: ${BRIDGE_PORT}
     develop:
       watch:
         - action: restart

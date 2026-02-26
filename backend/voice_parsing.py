@@ -16,7 +16,7 @@ class Movement:
 
 
 MOVEMENTS = (
-    {k: MovementType.FORWARD for k in ("forward", "forwards", "up")}
+    {k: MovementType.FORWARD for k in ("forward", "forwards", "up", "straight")}
     | {k: MovementType.BACKWARD for k in ("backward", "backwards", "reverse", "down")}
     | {"left": MovementType.LEFT, "right": MovementType.RIGHT}
 )

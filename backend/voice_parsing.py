@@ -8,14 +8,6 @@ class MovementType(Enum):
     LEFT = "left"
     RIGHT = "right"
 
-    @classmethod
-    def from_str(cls, move: str):
-        if move in ("back", "backwards", "reverse", "down"):
-            return cls.BACKWARD
-        elif move in ("up", "forwards"):
-            return cls.FORWARD
-        return cls(move)
-
 
 @dataclass
 class Movement:
@@ -23,7 +15,15 @@ class Movement:
     duration: int
 
 
-MOVEMENTS = ("forward", "forwards", "up", "down", "reverse", "down", "backward", "backwards", "left", "right")
+MOVEMENTS = (
+    {k: MovementType.FORWARD for k in ("forward", "forwards", "up")}
+    | {k: MovementType.BACKWARD for k in ("backward", "backwards", "reverse", "down")}
+    | {"left": MovementType.LEFT, "right": MovementType.RIGHT}
+)
+
+
+def to_movement(move: str):
+    return MOVEMENTS[move]
 
 
 def peek(after: int, lst: list):
@@ -36,7 +36,7 @@ def word_to_num(word: str):
     if word.isdigit():
         return int(word)
     maps = dict(
-        one=1, two=2, three=3, four=4, five=5, six=6, seven=7, eight=8, nine=9, zero=0
+        zero=0, one=1, two=2, three=3, four=4, five=5, six=6, seven=7, eight=8, nine=9, ten=10
     )
     return maps[word]
 
@@ -47,7 +47,7 @@ def parse_speech(speech: str):
     i = 0
     while i < len(tokens):
         if tokens[i] in MOVEMENTS:
-            move = MovementType.from_str(tokens[i])
+            move = to_movement(tokens[i])
             if peek(i, tokens) == "for":
                 i += 1
                 num = word_to_num(peek(i, tokens))

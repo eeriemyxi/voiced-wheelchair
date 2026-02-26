@@ -41,7 +41,6 @@ def send_to_bluetooth(message: str):
             print(f"Sending: {message}")
             s.sendall(message.encode("utf-8"))
 
-            # Keep reading until the Arduino sends a newline
             response = b""
             while b"\n" not in response:
                 chunk = s.recv(1024)
@@ -63,14 +62,30 @@ def send_to_bluetooth(message: str):
 async def _(prompt: str, use_ai: bool = False):
     if control_lock.locked():
         return {"error": "control already running"}
-    
+
     print(f"Received {prompt=} {use_ai=}")
 
     async with control_lock:
         if not use_ai:
             instructions = vp.parse_speech(prompt)
-            for move in instructions:
-                print(f"Executing {move=}...")
+            for movement in instructions:
+                print(f"Executing {movement=}...")
+                if movement.move is vp.MovementType.FORWARD:
+                    send_to_bluetooth("W")
+                    await asyncio.sleep(movement.duration)
+                    send_to_bluetooth("S")
+                elif movement.move == vp.MovementType.BACKWARD:
+                    send_to_bluetooth("X")
+                    await asyncio.sleep(movement.duration)
+                    send_to_bluetooth("S")
+                elif movement.move == vp.MovementType.LEFT:
+                    send_to_bluetooth("L")
+                    await asyncio.sleep(2)
+                    send_to_bluetooth("S")
+                elif movement.move == vp.MovementType.RIGHT:
+                    send_to_bluetooth("R")
+                    await asyncio.sleep(2)
+                    send_to_bluetooth("S")
             return dict(prompt=prompt, instructions=instructions)
 
         response = chat.send_message(SYSTEM_PROMPT + f"---\nINPUT: " + prompt)

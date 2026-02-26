@@ -10,9 +10,9 @@ class MovementType(Enum):
 
     @classmethod
     def from_str(cls, move: str):
-        if move in ("back", "reverse", "down"):
+        if move in ("back", "backwards", "reverse", "down"):
             return cls.BACKWARD
-        elif move in ("up"):
+        elif move in ("up", "forwards"):
             return cls.FORWARD
         return cls(move)
 
@@ -23,7 +23,7 @@ class Movement:
     duration: int
 
 
-MOVEMENTS = ("forward", "up", "down", "reverse", "down", "backward", "left", "right")
+MOVEMENTS = ("forward", "forwards", "up", "down", "reverse", "down", "backward", "backwards", "left", "right")
 
 
 def peek(after: int, lst: list):

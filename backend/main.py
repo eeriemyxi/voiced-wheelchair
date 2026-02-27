@@ -80,11 +80,11 @@ async def _(prompt: str, use_ai: bool = False):
                     send_to_bluetooth("S")
                 elif movement.move == vp.MovementType.LEFT:
                     send_to_bluetooth("L")
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(1.5)
                     send_to_bluetooth("S")
                 elif movement.move == vp.MovementType.RIGHT:
                     send_to_bluetooth("R")
-                    await asyncio.sleep(2)
+                    await asyncio.sleep(0.7)
                     send_to_bluetooth("S")
             return dict(prompt=prompt, instructions=instructions)
 

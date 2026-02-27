@@ -10,7 +10,7 @@ const int in3 = 7;
 const int in4 = 6;  
 
 // Speed variable (0 to 255)
-int motorSpeed = 200; 
+int motorSpeed = 100; 
 
 void setup() {
   // Set all motor control pins to outputs
